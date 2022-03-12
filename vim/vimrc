@@ -1,0 +1,507 @@
+"""""""""""""""""""""""""公共基础配置 BEGIN"""""""""""""""""""""""""
+filetype on
+"折叠定义
+"zC 当前位置嵌套折叠
+"ZO 当前位置嵌套展开
+set nu
+set ruler
+set cursorline
+"set cursorcolumn
+set hlsearch
+set incsearch
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set completeopt=longest,menu
+set backspace=2
+set expandtab
+"vim find区分大小写
+set noic
+set shiftwidth=4
+"编辑时一个TAB字符占多少个空格的位置
+set tabstop=4
+"方便在开启了et后使用退格（backspace）键，每次退格将删除X个空格
+set softtabstop=4
+" 使回格键（backspace）正常处理indent(缩进位置), eol(行结束符), start(段首), 很奇怪 Vim 默认竟然不允许在这些地方使用 backspace
+set backspace=indent,eol,start
+" 开启实时搜索
+set incsearch
+" 搜索时大小写不敏感
+set ignorecase
+
+"定义快快捷键前缀
+let mapleader=";"
+
+"括号匹配闪动
+set sm
+"代码折叠配置
+"set fdm=indent
+"""""""""""""""""""代码缩进配置 BEGIN""""""""""""""""""
+"自动缩进C/C++代码
+set cindent
+
+"开启时，在行首按TAB将加入 shiftwidth 个空格，否则加入 tabstop 个空格
+set smarttab
+"设置代码缩进线
+filetype indent on
+let g:indentLine_enabled = 1
+let g:autoopenp8_disable_show_diff=0
+let g:indentLine_char='¦'
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+"let g:indentLine_concealcursor = 'inc'
+"let g:indentLine_setColors = 0
+
+filetype plugin indent on    " 启用自动补全
+"# 开启语法
+syntax enable
+syntax on
+"# 显示行号
+set nu
+"# 自动缩进
+set autoindent
+"# 使用空格扩展tab
+set expandtab
+"# tab大小为4
+set ts=4 sw=4 et
+"# vim启动时启用vim_indent_guides
+let g:indent_guides_enable_on_vim_startup = 1
+"# 开始画缩进线的缩进等级
+let g:indent_guides_start_level = 1
+"# 缩进线宽度
+let g:indent_guides_guide_size = 1
+"# 配色方案
+colorscheme desert
+"# 设定基数列和偶数列的缩进线颜色
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=white ctermbg=white
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=red ctermbg=red
+""""""""""""""""""代码缩进配置 END""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""""""快捷键配置 BEGIN""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"可以使默认模式改为递归
+let g:EasyGrepRecursive=1
+"grep指定文件"查找快捷键
+let g:EasyGrepMode=2
+""""使用方法""""
+"<Leader>vv  - Grep for the word under the cursor, match all occurences,
+"             like 'g*'.  See ":help gstar".
+"<Leader>vV  - Grep for the word under the cursor, match whole word, like
+"              '*'.  See ":help star".
+"<Leader>va  - Like vv, but add to existing list.
+"<Leader>vA  - Like vV, but add to existing list.
+"<Leader>vr  - Perform a global search on the word under the cursor
+"              and prompt for a pattern with which to replace it.
+"<Leader>vR  - Like vr, but match whole word.
+"
+" 设置快捷键，保存并关闭一个窗口
+map <leader>wq :wq<CR>
+"直接关闭一个窗口
+map <leader>q :qall<CR>
+"保存编辑的内容
+map <leader>w :w<CR>
+"强制关闭一个窗口
+map <leader>q! :qall!<CR>
+"vimgrep快捷键
+":vimgrep /你要搜索的关键字/g 正则匹配的文件描述
+":cnext, :cn         # 当前页下一个结果
+":cprevious, :cp     # 当前页上一个结果
+":clist, :cl         # 使用 more 打开 Quickfix 窗口
+":copen, :cope, :cw  # 打开 Quickfix 窗口，列出所有结果
+":ccl[ose]           # 关闭 Quickfix 窗口。
+
+"""""""""""""""""""""""""""""""""""""""""""快捷键管理 END""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""公共基础配置 END"""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""""旧的管理方式,不再更新 BEGIN"""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""插件管理""""""""""""""""""""""""""""""""""""""""""""""""
+call plug#begin('~/.vim/autoload')
+
+"代码缩进对齐插件
+Plug 'Yggdroot/indentLine'
+
+" 在第一次执行 NERDTreeToggle 命令时，NERD tree 插件才开始加载
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+" on 支持多命令
+Plug 'junegunn/vim-github-dashboard', { 'on': ['GHDashboard', 'GHActivity'] }
+" 打开 clojure 类型的文件时，vim-fireplace' 才开始加载
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+" for 支持多文件类型
+Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
+
+" on 为空，后面手动加载
+Plug '~/YouCompleteMe', {'on': []}
+augroup load_ycm
+    autocmd!
+    "延迟加载，在 insert 模式手动加载插件
+    autocmd InsertEnter * call plug#load('YouCompleteMe') | autocmd! load_ycm
+augroup END
+"代码补全
+Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
+"语法高亮
+Plug 'sheerun/vim-polyglot'
+"将输入的TAB自动展开成空格。开启后要输入TAB，需要Ctrl-V<TAB>
+
+
+" 用来提供一个导航目录的侧边栏
+Plug 'scrooloose/nerdtree'
+" 可以使 nerdtree 的 tab 更加友好些
+Plug 'jistr/vim-nerdtree-tabs'
+
+" 查看当前代码文件中的变量和函数列表的插件，
+" 可以切换和跳转到代码中对应的变量和函数的位置
+" 大纲式导航, Go 需要 https://github.com/jstemmer/gotags 支持
+Plug 'majutsushi/tagbar'
+
+" 自动补全括号的插件，包括小括号，中括号，以及花括号
+Plug 'jiangmiao/auto-pairs'
+
+" Vim状态栏插件，包括显示行号，列号，文件类型，文件名，以及Git状态
+Plug 'vim-airline/vim-airline'
+
+" 代码自动完成，安装完插件还需要额外配置才可以使用
+"Plug 'Valloric/YouCompleteMe'
+" 生成YCM 配置
+Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
+
+" c++ format
+Plug 'rhysd/vim-clang-format'
+
+" tags auto generation
+Plug 'universal-ctags/ctags'
+Plug 'ludovicchabant/vim-gutentags'
+
+"git插件
+Plug 'tpope/vim-fugitive'
+
+""""""""""""""""""""""""""""""
+" clang-format
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Plug 'rhysd/vim-clang-format'
+let g:clang_format#command='/usr/bin/clang-format-3.5'
+let g:clang_format#detect_style_file = 1
+let g:clang_format#auto_format = 0
+let g:clang_format#auto_format_on_insert_leave = 0
+
+" map to <Leader>cf in C++ code
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""leaderF插件--begin""""""""""""""""""""""""""""""""""
+"https://github.com/Yggdroot/LeaderF
+Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension'  }
+
+"所有leaderF的配置
+let s:cachedir = expand('~/.cache/nvim')
+let s:configdir = expand('~/.config/nvim')
+let g:Lf_Ctags="ctags"
+let g:Lf_WorkingDirectoryMode = 'AF'
+let g:Lf_RootMarkers = ['.git', '.svn', '.hg', '.project', '.root']
+let g:Lf_UseVersionControlTool=1 "default value, can ignore
+let g:Lf_PreviewInPopup = 1
+let g:Lf_CacheDirectory = s:cachedir
+let g:Lf_RgStorePattern="r"
+let g:Lf_GtagsAutoGenerate = 1
+let g:Lf_Gtagslabel = 'native-pygments'
+let g:Lf_GtagsSource = 1
+let g:Lf_ShortcutF = '<c-p>'
+let g:Lf_ShortcutB = '<c-l>'
+let g:Lf_ReverseOrder = 1
+noremap <leader>f :LeaderfSelf<cr>
+noremap <leader>fm :LeaderfMru<cr>
+noremap <leader>ff :LeaderfFunction<cr>
+noremap <leader>fb :LeaderfBufTagAll<cr>
+noremap <leader>ft :LeaderfBufTag<cr>
+noremap <leader>fl :LeaderfLine<cr>
+noremap <leader>fw :LeaderfWindow<cr>
+nmap <unique> <leader>fr <Plug>LeaderfRgPrompt
+nmap <unique> <leader>fra <Plug>LeaderfRgCwordLiteralNoBoundary
+nmap <unique> <leader>frb <Plug>LeaderfRgCwordLiteralBoundary
+nmap <unique> <leader>frc <Plug>LeaderfRgCwordRegexNoBoundary
+nmap <unique> <leader>frd <Plug>LeaderfRgCwordRegexBoundary
+
+vmap <unique> <leader>fra <Plug>LeaderfRgVisualLiteralNoBoundary
+vmap <unique> <leader>frb <Plug>LeaderfRgVisualLiteralBoundary
+vmap <unique> <leader>frc <Plug>LeaderfRgVisualRegexNoBoundary
+vmap <unique> <leader>frd <Plug>LeaderfRgVisualRegexBoundary
+
+nmap <unique> <leader>fgd <Plug>LeaderfGtagsDefinition
+nmap <unique> <leader>fgr <Plug>LeaderfGtagsReference
+nmap <unique> <leader>fgs <Plug>LeaderfGtagsSymbol
+nmap <unique> <leader>fgg <Plug>LeaderfGtagsGrep
+
+vmap <unique> <leader>fgd <Plug>LeaderfGtagsDefinition
+vmap <unique> <leader>fgr <Plug>LeaderfGtagsReference
+vmap <unique> <leader>fgs <Plug>LeaderfGtagsSymbol
+vmap <unique> <leader>fgg <Plug>LeaderfGtagsGrep
+
+noremap <leader>fgo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+noremap <leader>fgn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+noremap <leader>fgp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+
+"""""""""""""""""""""""""""""leaderF插件配置--end"""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""旧的管理方式,不再更新 END"""""""""""""""""""""""""""""""""""""""""
+
+
+
+
+
+""""""""""""""""""""""""""""""""""""以后的插件更新从这里开始""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""'Vundle插件管理配置 BEGIN""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""'Vundle自身的配置BEGIN'""""""""""""""""""""""""""""""""""""
+"安装方法:git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+"使用方法: 
+"先执行source % 再执行PlugInInstall
+ " 常用命令
+ " :PluginList       - 查看已经安装的插件
+ " :PluginInstall    - 安装插件
+ " :PluginUpdate     - 更新插件
+ " :PluginSearch     - 搜索插件，例如 :PluginSearch xml就能搜到xml相关的插件
+ " :PluginClean      - 删除插件，把安装插件对应行删除，然后执行这个命令即可
+ " h: vundle         - 获取帮助
+
+let g:vundle_default_git_proto = 'git'
+set nocompatible              " be iMproved, required
+filetype off 
+" 启用vundle来管理vim插件
+set rtp+=~/.vim/bundle/Vundle.vim
+""""""""""""""""""""""""""""""""""""'Vundle自身的配置END'""""""""""""""""""""""""""""""""""""
+call vundle#begin()
+""""""""""""""""""""""""安装插件写在这之后""""""""""""""""""""""""""""""""""
+"let Vundle manager required
+Plugin 'VundleVim/Vundle.vim'
+
+"vim indent guides"
+Plugin 'Yggdroot/indentLine'
+
+"git 插件
+Plugin 'zivyangll/git-blame.vim'
+Plugin 'tpope/vim-fugitive'
+
+"C++代码补全/跳转插件
+"安装步骤
+"1. cd ~/.vim/bundle/
+"2. [git clone https://github.com/ycm-core/YouCompleteMe.git]
+"3. [git submodule update --init --recursive]
+"4. ./install.sh --all 代表支持所有语言
+"5. mkdir ycm_build && cd ycm_build
+"6. cmake -G "Unix Makefiles" -DUSE_SYSTEM_BOOST=ON -DUSE_SYSTEM_LIBCLANG=ON . ~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp
+"7. cp ~/.vim/bundle/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py ~/.vim/
+Plugin 'Valloric/YouCompleteMe'
+
+"C++代码引用跳转工具
+"使用指南:https://github.com/dyng/ctrlsf.vim
+Plugin 'dyng/ctrlsf.vim'
+
+"快速find + grep
+Plugin 'rking/ag.vim'
+
+ """"""""""""""""""""""""""""安装插件写在这之前""""""""""""""""""""""""""""""""""""""""
+ call vundle#end()            " required
+ filetype plugin indent on    " required
+ call plug#end()
+"""""""""""""""""""""""""""""""""""""""Vundle插件管理配置 END""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""""""""""""""""""插件的一些全局设置 BEGIN""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""ag配置BEGIN"""""""""""""""""""
+let g:ag_prg="<custom-ag-path-goes-here> --vimgrep"
+let g:ag_working_path_mode="r"
+set runtimepath^=~/.vim/bundle/ag.vim
+"""""""""""""""""""ag配置END"""""""""""""""""""
+
+"""""""""""""""""""git 插件配置 BEGIN"""""""""""""""""""
+nnoremap <Leader>c :<C-u>call gitblame#echo()<CR>
+"""""""""""""""""""git 插件配置 END"""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""""""cscope 配置 BEGIN"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"vim打开在命令行模式输入ve查看编译选项是否已经加入cscope,没有就要自己手动编译时候加上--enable-cscope
+"来源: http://cscope.sourceforge.net/cscope_maps.vim
+
+"使用 quickfix 窗口来显示 cscope 结果
+"+ 表示显示结果必须追加到quickfix窗口。
+"- 隐含着清空先前的的显示结果。
+"0 表示不使用quickfix窗口。
+"默认不使用quickfix窗口。
+"注意：
+"	如果有多个匹配项，cscope会弹出窗口显示多个匹配项，输入数字即可跳转到对应匹配项。而设
+"置cscope结果输出到quickfix后，cscope只会显示第一个匹配项，如果想要查看其它匹配项，需要输入cw，
+"进入quickfix的窗口进行查看。
+set cscopequickfix=s-,c-,d-,i-,t-,e-
+
+"使用路径前缀,默认项目根目录
+set csre
+""""""""""""""""""""""""""""cscope使用提示""""""""""""""""""""""""""
+" find ./ -name "*.h" -o -name "*.c" -o -name "*.cc" -o -name "*.cc" -o -name "*.cpp" > cscope.files
+" cscope -Rbkq -i cscope.files
+"进入vim，如果vim没有自动加载工程的cscope.output文件，需要使用:cs add来设置生成好的cscope.output文件
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"配置 copy from http://cscope.sourceforge.net/cscope_maps.vim
+""""""""""""" Standard cscope/vim boilerplate
+
+" use both cscope and ctag for 'ctrl-]', ':ta', and 'vim -t'
+set cscopetag
+
+" check cscope for definition of a symbol before checking ctags: set to 1
+" if you want the reverse search order.
+set csto=0
+
+" add any cscope database in current directory
+if filereadable("cscope.out")
+    cs add cscope.out  
+" else add the database pointed to by environment variable 
+elseif $CSCOPE_DB != ""
+    cs add $CSCOPE_DB
+endif
+
+" show msg when any other cscope db added
+set cscopeverbose  
+
+
+""""""""""""" My cscope/vim key mappings
+"
+" The following maps all invoke one of the following cscope search types:
+"
+"   's'   symbol: find all references to the token under cursor
+"   'g'   global: find global definition(s) of the token under cursor
+"   'c'   calls:  find all calls to the function name under cursor
+"   't'   text:   find all instances of the text under cursor
+"   'e'   egrep:  egrep search for the word under cursor
+"   'f'   file:   open the filename under cursor
+"   'i'   includes: find files that include the filename under cursor
+"   'd'   called: find functions that function under cursor calls
+"
+" Below are three sets of the maps: one set that just jumps to your
+" search result, one that splits the existing vim window horizontally and
+" diplays your search result in the new window, and one that does the same
+" thing, but does a vertical split instead (vim 6 only).
+"
+" I've used CTRL-\ and CTRL-@ as the starting keys for these maps, as it's
+" unlikely that you need their default mappings (CTRL-\'s default use is
+" as part of CTRL-\ CTRL-N typemap, which basically just does the same
+" thing as hitting 'escape': CTRL-@ doesn't seem to have any default use).
+" If you don't like using 'CTRL-@' or CTRL-\, , you can change some or all
+" of these maps to use other keys.  One likely candidate is 'CTRL-_'
+" (which also maps to CTRL-/, which is easier to type).  By default it is
+" used to switch between Hebrew and English keyboard mode.
+"
+" All of the maps involving the <cfile> macro use '^<cfile>$': this is so
+" that searches over '#include <time.h>" return only references to
+" 'time.h', and not 'sys/time.h', etc. (by default cscope will return all
+" files that contain 'time.h' as part of their name).
+
+
+" To do the first type of search, hit 'CTRL-\', followed by one of the
+" cscope search types above (s,g,c,t,e,f,i,d).  The result of your cscope
+" search will be displayed in the current window.  You can use CTRL-T to
+" go back to where you were before the search.  
+"
+
+nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>	
+nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>	
+nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>	
+nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>	
+nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>	
+nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>	
+nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>	
+
+
+" Using 'CTRL-spacebar' (intepreted as CTRL-@ by vim) then a search type
+" makes the vim window split horizontally, with search result displayed in
+" the new window.
+"
+" (Note: earlier versions of vim may not have the :scs command, but it
+" can be simulated roughly via:
+"    nmap <C-@>s <C-W><C-S> :cs find s <C-R>=expand("<cword>")<CR><CR>	
+
+nmap <C-@>s :scs find s <C-R>=expand("<cword>")<CR><CR>	
+nmap <C-@>g :scs find g <C-R>=expand("<cword>")<CR><CR>	
+nmap <C-@>c :scs find c <C-R>=expand("<cword>")<CR><CR>	
+nmap <C-@>t :scs find t <C-R>=expand("<cword>")<CR><CR>	
+nmap <C-@>e :scs find e <C-R>=expand("<cword>")<CR><CR>	
+nmap <C-@>f :scs find f <C-R>=expand("<cfile>")<CR><CR>	
+nmap <C-@>i :scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>	
+nmap <C-@>d :scs find d <C-R>=expand("<cword>")<CR><CR>	
+
+
+" Hitting CTRL-space *twice* before the search type does a vertical 
+" split instead of a horizontal one (vim 6 and up only)
+"
+" (Note: you may wish to put a 'set splitright' in your .vimrc
+" if you prefer the new window on the right instead of the left
+
+nmap <C-@><C-@>s :vert scs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@><C-@>g :vert scs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@><C-@>c :vert scs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@><C-@>t :vert scs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@><C-@>e :vert scs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@><C-@>f :vert scs find f <C-R>=expand("<cfile>")<CR><CR>	
+nmap <C-@><C-@>i :vert scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>	
+nmap <C-@><C-@>d :vert scs find d <C-R>=expand("<cword>")<CR><CR>
+
+
+""""""""""""" key map timeouts
+"
+" By default Vim will only wait 1 second for each keystroke in a mapping.
+" You may find that too short with the above typemaps.  If so, you should
+" either turn off mapping timeouts via 'notimeout'.
+"
+"set notimeout 
+"
+" Or, you can keep timeouts, by uncommenting the timeoutlen line below,
+" with your own personal favorite value (in milliseconds):
+"
+"set timeoutlen=4000
+"
+" Either way, since mapping timeout settings by default also set the
+" timeouts for multicharacter 'keys codes' (like <F1>), you should also
+" set ttimeout and ttimeoutlen: otherwise, you will experience strange
+" delays as vim waits for a keystroke after you hit ESC (it will be
+" waiting to see if the ESC is actually part of a key code like <F1>).
+"
+"set ttimeout 
+"
+" personally, I find a tenth of a second to work well for key code
+" timeouts. If you experience problems and have a slow terminal or network
+" connection, set it higher.  If you don't set ttimeoutlen, the value for
+" timeoutlent (default: 1000 = 1 second, which is sluggish) is used.
+"
+"set ttimeoutlen=100
+"""""""""""""""""""""""""""""""""""""""""""cscope 配置 END"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""ctags配置 BEGIN"""""""""""""""""""""""
+"vim-gutentags
+set tags=./.tags;,.tags
+"gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
+let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project','.vscode']
+" 所生成的数据文件的名称
+let g:gutentags_ctags_tagfile = '.tags'
+" 将自动生成的 tags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
+let s:vim_tags = expand('~/.cache/tags')
+let g:gutentags_cache_dir = s:vim_tags
+" 配置 ctags 的参数
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
+let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
+let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+" 检测 ~/.cache/tags 不存在就新建
+if !isdirectory(s:vim_tags)
+   silent! call mkdir(s:vim_tags, 'p')
+endif
+""""""""显示ctags匹配列表而不是直接跳转""""""""
+map <c-]> g<c-]>
+
+""""""""""""""""""""""taglist""""""""""""""""""
+let Tlist_Auto_Open=0
+set tags=tags;
+set autochdir
+"""""""""""""""""""""""ctags配置 END"""""""""""""""""""""""
+
+"""""""""""""""""""""ctrlSF配置BEGIN"""""""""""""""""""""
+let g:ctrlsf_position = 'right'
+let g:ctrlsf_regex_pattern = 1
+let g:ctrlsf_case_sensitive = 'yes'
+let g:ctrlsf_default_root = 'project'
+let g:ctrlsf_auto_close = 0
+let g:ctrlsf_winsize = '30%'
+nmap <Leader>f :CtrlSF<CR>
+"""""""""""""""""""""ctrlSF配置END"""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""插件的一些全局设置 END""""""""""""""""""""""""""""""""""""""""""""""
